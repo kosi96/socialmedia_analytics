@@ -1,0 +1,6 @@
+.idea
+data/
+sample/
+src_obsolete/
+venv/
+config.json

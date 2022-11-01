@@ -1,0 +1,9 @@
+{
+  "my_username": "myusername",
+  "friend_username": "friendusername",
+  "sources": [
+    "whatsapp",
+    "instagram",
+    "facebook"
+  ]
+}
