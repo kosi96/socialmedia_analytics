@@ -83,10 +83,10 @@ def instagram_data_to_intermediate_format(file_path,  my_username, friend_userna
 
         ## String unix time to timestamp index
         df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
-    return df
+        df.set_index('timestamp', inplace=True)
+        df.sort_index(inplace=True)
 
-    ## TODO: Perhaps set timestamp as index??
-    # df.set_index('timestamp', inplace=True)
+    return df
 
 
 def facebook_data_to_intermediate_format(file_path, my_username, friend_username):
@@ -106,6 +106,9 @@ def facebook_data_to_intermediate_format(file_path, my_username, friend_username
 
         ## String unix time to timestamp index
         df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+        df.set_index('timestamp', inplace=True)
+        df.sort_index(inplace=True)
+
     return df
 
 
@@ -145,28 +148,41 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
 
     df['timestamp'] = df['timestamp'].apply(to_valid_date_time_format)
     df['timestamp'] = pd.to_datetime(df['timestamp'], format='%m/%d/%y, %H:%M')
+    df.set_index('timestamp', inplace=True)
+    df.sort_index(inplace=True)
 
     return df
 
+def get_preprocessed_data_frame():
+    my_username, friend_username = load_config_file_and_fetch_usernames()
 
-if __name__ == '__main__':
-    ig, fb, wa = None, None, None
+    df_path = f'data/processed/{my_username}_{friend_username}.pkl'
+    if os.path.isfile(df_path):
+        return pd.read_pickle(df_path)
+    else:
+        ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(base_instagram_path, friend_username),
+                                                   my_username, friend_username)
+        fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(base_facebook_path, friend_username),
+                                                  my_username, friend_username)
+        wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(base_whatsapp_path, friend_username),
+                                                  my_username, friend_username)
+
+        df = pd.concat([ig, fb, wa])
+        df.to_pickle(df_path)
+        return df
+
+
+def load_config_file_and_fetch_usernames():
     if not os.path.isfile('config.json'):
         raise Exception("No config.json found in the root directory.")
+
     with open('config.json', 'r') as f:
         config = json.load(f)
         # TODO: verify valid config (mandatory fields)
 
-    my_username, friend_username = config['my_username'], config['friend_username']
+    return config['my_username'], config['friend_username']
 
-    ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(base_instagram_path, friend_username),
-                                               my_username, friend_username)
-    fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(base_facebook_path, friend_username),
-                                              my_username, friend_username)
-    wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(base_whatsapp_path, friend_username),
-                                              my_username, friend_username)
 
-    df = pd.concat([ig, fb, wa])
-    df.to_pickle(f'data/processed/{my_username}_{friend_username}.pkl')
-    # df = pd.read_pickle(f'data/processed/{my_username}_{friend_username}.pkl')
+if __name__ == '__main__':
+    get_preprocessed_data_frame()
     print('PyCharm')

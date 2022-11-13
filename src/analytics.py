@@ -1,0 +1,96 @@
+import emoji as emoji
+from collections import Counter
+
+import numpy as np
+import pandas as pd
+
+from src.preprocess import get_preprocessed_data_frame, load_config_file_and_fetch_usernames
+
+
+def message_overall_frequency(df, period):
+    return df.resample(period, closed='right', label='right').size()
+
+def message_daily_frequency(df, period):
+    tmp_df = df.resample(period, closed='right', label='right').size()
+    return tmp_df.groupby(tmp_df.index.time).sum()
+
+def message_daily_frequency_per_user(df, period, username):
+    tmp_df = df.loc[df['sender'] == username, :].resample(period, closed='right', label='right').size()
+    return tmp_df.groupby(tmp_df.index.time).sum()
+
+def favored_emojis_in_message(df, number, username):
+    tmp_df = df.loc[df['sender'] == username, :]
+
+    # Concatenate whole conversation in a string
+    content = tmp_df['content'].str.cat(sep=' ')
+    emojis = extract_emojis_from_string(content)
+
+    results = dict(Counter(emojis).most_common(number))
+    return results
+
+def extract_emojis_from_string(content):
+    return [w for w in content if emoji.is_emoji(w)]
+
+def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
+    # TODO quantile distribution for more accurate results
+    avg_response_time = {my_username: 0, friend_username: 0}
+
+    for source, df_source in df.groupby('source'):
+
+        # Take into the account only "awake" hours
+        df_source = df_source.between_time(working_hours_from, working_hours_to)
+
+        # Discard multiple messages that are usually sent at once
+        df_source = df_source.loc[df_source['sender'] != df_source['sender'].shift(1), :]
+
+        df_source['response_time'] = df_source.index.to_series() - df_source.index.to_series().shift(1)
+        print('dd')
+
+        #TODO discard outliers
+
+        #TODO get average response time per user
+
+
+
+
+
+        print('dd')
+
+    return avg_response_time
+
+
+# def getMessageSentByWeekDay(df):
+#     occurances = df.groupby(df.index.day_name()).size()
+#     numberOfDaysTexting = df.resample('1D', closed='right', label='right').size()
+#     _, numberOfWeekdayOccurance = np.unique(numberOfDaysTexting.index.day_name(), return_counts=True)
+#
+#     results = dict(round(occurances / numberOfWeekdayOccurance, 1))
+#
+#     daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+#     return {k: results[k] for k in daysOrder if k in results}
+
+
+if __name__ == '__main__':
+    my_username, friend_username = load_config_file_and_fetch_usernames()
+    df = get_preprocessed_data_frame()
+
+    '''
+    # First use-case
+    overall_freq = message_overall_frequency(df, period='1D')
+
+    # Second use-case
+    daily_freq_overall = message_daily_frequency(df, period='15min')
+    daily_freq_me = message_daily_frequency_per_user(df, period='15min', username=my_username)
+    daily_freq_friend = message_daily_frequency_per_user(df, period='15min', username=friend_username)
+
+    # Third use-case
+    favored_emojis_me = favored_emojis_in_message(df, number=5, username=my_username)
+    favored_emojis_friend = favored_emojis_in_message(df, number=5, username=friend_username)
+    '''
+
+    # Fourth use-cae
+    response_time_me = message_response_time(df, working_hours_from='07:00', working_hours_to='23:00',
+                                             my_username=my_username,
+                                             friend_username=friend_username)
+
+    print('PyCharm')
