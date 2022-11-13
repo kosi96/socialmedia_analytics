@@ -39,6 +39,7 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
         # Discard multiple messages that are usually sent at once
         df_source = df_source.loc[df_source['sender'] != df_source['sender'].shift(1), :]
 
+        # Get seconds needed for each response
         df_source['response_time'] = df_source.index.to_series() - df_source.index.to_series().shift(1)
         df_source = df_source.dropna()
         df_source['response_time_s'] = df_source['response_time'].dt.total_seconds().astype(int)
