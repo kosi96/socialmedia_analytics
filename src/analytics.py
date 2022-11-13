@@ -29,8 +29,7 @@ def extract_emojis_from_string(content):
     return [w for w in content if emoji.is_emoji(w)]
 
 def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
-    # TODO: Add quantile distribution for more accurate results
-    avg_response_time = {my_username: 0, friend_username: 0}
+    avg_response_time_in_s = {my_username: [], friend_username: []}
 
     for source, df_source in df.groupby('source'):
 
@@ -41,13 +40,19 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
         df_source = df_source.loc[df_source['sender'] != df_source['sender'].shift(1), :]
 
         df_source['response_time'] = df_source.index.to_series() - df_source.index.to_series().shift(1)
-        print('dd')
+        df_source = df_source.dropna()
+        df_source['response_time_s'] = df_source['response_time'].dt.total_seconds().astype(int)
 
-        #TODO discard outliers
+        # Discard outliers, if response is longer than 1 day
+        df_source = df_source.loc[df_source['response_time_s'] < 3600 * 24, :]
 
-        #TODO get average response time per user
+        # TODO: Add quantile distribution for more accurate results
+        results_tmp = df_source.groupby('sender').mean().to_dict().get('response_time_s')
 
-    return avg_response_time
+        avg_response_time_in_s[my_username].append(int(results_tmp[my_username]))
+        avg_response_time_in_s[friend_username].append(int(results_tmp[friend_username]))
+
+    return avg_response_time_in_s
 
 
 if __name__ == '__main__':
