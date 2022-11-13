@@ -1,9 +1,6 @@
 import emoji as emoji
 from collections import Counter
 
-import numpy as np
-import pandas as pd
-
 from src.preprocess import get_preprocessed_data_frame, load_config_file_and_fetch_usernames
 
 
@@ -32,7 +29,7 @@ def extract_emojis_from_string(content):
     return [w for w in content if emoji.is_emoji(w)]
 
 def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
-    # TODO quantile distribution for more accurate results
+    # TODO: Add quantile distribution for more accurate results
     avg_response_time = {my_username: 0, friend_username: 0}
 
     for source, df_source in df.groupby('source'):
@@ -50,24 +47,7 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
 
         #TODO get average response time per user
 
-
-
-
-
-        print('dd')
-
     return avg_response_time
-
-
-# def getMessageSentByWeekDay(df):
-#     occurances = df.groupby(df.index.day_name()).size()
-#     numberOfDaysTexting = df.resample('1D', closed='right', label='right').size()
-#     _, numberOfWeekdayOccurance = np.unique(numberOfDaysTexting.index.day_name(), return_counts=True)
-#
-#     results = dict(round(occurances / numberOfWeekdayOccurance, 1))
-#
-#     daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-#     return {k: results[k] for k in daysOrder if k in results}
 
 
 if __name__ == '__main__':
