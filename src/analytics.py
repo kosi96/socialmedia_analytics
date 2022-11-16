@@ -1,19 +1,22 @@
 import emoji as emoji
 from collections import Counter
 
-from src.preprocess import get_preprocessed_data_frame, load_config_file_and_fetch_usernames
+from preprocess import get_preprocessed_data_frame, load_config_file_and_fetch_usernames
 
 
 def message_overall_frequency(df, period):
     return df.resample(period, closed='right', label='right').size()
 
+
 def message_daily_frequency(df, period):
     tmp_df = df.resample(period, closed='right', label='right').size()
     return tmp_df.groupby(tmp_df.index.time).sum()
 
+
 def message_daily_frequency_per_user(df, period, username):
     tmp_df = df.loc[df['sender'] == username, :].resample(period, closed='right', label='right').size()
     return tmp_df.groupby(tmp_df.index.time).sum()
+
 
 def favored_emojis_in_message(df, number, username):
     tmp_df = df.loc[df['sender'] == username, :]
@@ -22,17 +25,20 @@ def favored_emojis_in_message(df, number, username):
     content = tmp_df['content'].str.cat(sep=' ')
     emojis = extract_emojis_from_string(content)
 
-    results = dict(reversed(Counter(emojis).most_common(number)))
+    most_common_emojis = Counter(emojis).most_common(number)
+    normalize_most_common_emojis = [(pair[0], pair[1]/len(emojis) * 100) for pair in most_common_emojis]
+    results = dict(reversed(normalize_most_common_emojis))
     return results
+
 
 def extract_emojis_from_string(content):
     return [w for w in content if emoji.is_emoji(w)]
 
+
 def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
-    avg_response_time_in_s = {my_username: [], friend_username: []}
+    avg_response_time_in_s = {my_username: {}, friend_username: {}}
 
     for source, df_source in df.groupby('source'):
-
         # Take into the account only "awake" hours
         df_source = df_source.between_time(working_hours_from, working_hours_to)
 
@@ -48,10 +54,10 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
         df_source = df_source.loc[df_source['response_time_s'] < 3600 * 24, :]
 
         # TODO: Add quantile distribution for more accurate results
-        results_tmp = df_source.groupby('sender').mean().to_dict().get('response_time_s')
+        results_tmp = df_source.loc[:, ['sender', 'response_time_s']].groupby('sender').mean().to_dict().get('response_time_s')
 
-        avg_response_time_in_s[my_username].append(int(results_tmp[my_username]))
-        avg_response_time_in_s[friend_username].append(int(results_tmp[friend_username]))
+        avg_response_time_in_s[my_username][source] = int(results_tmp[my_username])
+        avg_response_time_in_s[friend_username][source] = int(results_tmp[friend_username])
 
     return avg_response_time_in_s
 

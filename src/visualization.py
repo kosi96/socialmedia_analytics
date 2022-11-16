@@ -1,37 +1,38 @@
 import plotly.graph_objects as go
 
 layout = go.Layout(
-        font={'family': 'Roboto',
-              'size': 14,
-              'color': 'whitesmoke'},
-        template='seaborn',
-        margin={'t': 50, 'b': 70},
-        xaxis={'showline': True,
-               'zeroline': False,
-               'showgrid': False,
-               'showticklabels': True,
-               'color': '#a3a7b0'},
-        yaxis={
-            'fixedrange': True,
-            'showline': False,
-            'zeroline': False,
-            'showgrid': False,
-            'showticklabels': True,
-            'ticks': 'inside',
-            'color': '#a3a7b0'},
-        plot_bgcolor='#23272c',
-        paper_bgcolor='#23272c'
-    )
+    font={'family': 'Roboto',
+          'size': 14,
+          'color': 'whitesmoke'},
+    template='seaborn',
+    margin={'t': 50, 'b': 70},
+    xaxis={'showline': True,
+           'zeroline': False,
+           'showgrid': False,
+           'showticklabels': True,
+           'color': '#a3a7b0'},
+    yaxis={
+        'fixedrange': True,
+        'showline': False,
+        'zeroline': False,
+        'showgrid': False,
+        'showticklabels': True,
+        'ticks': 'inside',
+        'color': '#a3a7b0'},
+    plot_bgcolor='#23272c',
+    paper_bgcolor='#23272c'
+)
 
 color_palettes = ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']
 
-def line_chart_with_moving_average(main_series, moving_average_series=[], type='year'):
+
+def line_chart_with_moving_average(main_series, moving_average_series=[], type='year', save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(
         go.Scatter(
             x=main_series.index,
             y=main_series.values,
-                   ))
+        ))
 
     for ma_series in moving_average_series:
         fig.add_trace(
@@ -60,11 +61,13 @@ def line_chart_with_moving_average(main_series, moving_average_series=[], type='
             height=600
         )
 
-    fig.show()
+    if save_as != None:
+        fig.write_image(save_as)
+    else:
+        fig.show()
 
 
-def horizontal_bar_chart(dict, labels='left'):
-
+def horizontal_bar_chart(dict, labels='left', save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Bar(
         x=list(dict.values()),
@@ -94,7 +97,10 @@ def horizontal_bar_chart(dict, labels='left'):
                    'side': 'right',
                    })
 
-    fig.show()
+    if save_as != None:
+        fig.write_image(save_as)
+    else:
+        fig.show()
 
 #
 # def linePlotWithMonthlyTrend(series):
