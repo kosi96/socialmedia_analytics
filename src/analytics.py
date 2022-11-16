@@ -22,7 +22,7 @@ def favored_emojis_in_message(df, number, username):
     content = tmp_df['content'].str.cat(sep=' ')
     emojis = extract_emojis_from_string(content)
 
-    results = dict(Counter(emojis).most_common(number))
+    results = dict(reversed(Counter(emojis).most_common(number)))
     return results
 
 def extract_emojis_from_string(content):
