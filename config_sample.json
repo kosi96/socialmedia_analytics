@@ -1,6 +1,8 @@
 {
   "my_username": "myusername",
   "friend_username": "friendusername",
+  "my_custom_name": "Me",
+  "friend_custom_name": "Friend",
   "sources": [
     "whatsapp",
     "instagram",

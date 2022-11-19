@@ -2,7 +2,7 @@ import emoji as emoji
 from collections import Counter
 import pandas as pd
 
-from preprocess import get_preprocessed_data_frame, load_config_file_and_fetch_usernames
+from preprocess import get_preprocessed_data_frame
 
 
 def message_overall_frequency(df, period):
@@ -47,7 +47,7 @@ def extract_emojis_from_string(content):
 
 
 def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
-    avg_response_time_in_s = {my_username: {}, friend_username: {}}
+    avg_response_time_in_min = {my_username: {}, friend_username: {}}
 
     for source, df_source in df.groupby('source'):
         # Take into the account only "awake" hours
@@ -66,32 +66,7 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
 
         results_tmp = df_source.loc[:, ['sender', 'response_time_s']].groupby('sender').mean().to_dict().get('response_time_s')
 
-        avg_response_time_in_s[my_username][source] = int(results_tmp[my_username])
-        avg_response_time_in_s[friend_username][source] = int(results_tmp[friend_username])
+        avg_response_time_in_min[my_username][source] = int(results_tmp[my_username]/60)
+        avg_response_time_in_min[friend_username][source] = int(results_tmp[friend_username]/60)
 
-    return avg_response_time_in_s
-
-
-if __name__ == '__main__':
-    my_username, friend_username = load_config_file_and_fetch_usernames()
-    df = get_preprocessed_data_frame()
-
-
-    # First use-case
-    overall_freq = message_overall_frequency(df, period='1D')
-
-    # Second use-case
-    daily_freq_overall = message_daily_frequency(df, period='15min')
-    daily_freq_me = message_daily_frequency_per_user(df, period='15min', username=my_username)
-    daily_freq_friend = message_daily_frequency_per_user(df, period='15min', username=friend_username)
-
-    # Third use-case
-    favored_emojis_me = favored_emojis_in_message(df, number=5, username=my_username)
-    favored_emojis_friend = favored_emojis_in_message(df, number=5, username=friend_username)
-
-    # Fourth use-cae
-    response_time_me = message_response_time(df, working_hours_from='07:00', working_hours_to='23:00',
-                                             my_username=my_username,
-                                             friend_username=friend_username)
-
-    print('PyCharm')
+    return avg_response_time_in_min

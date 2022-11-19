@@ -3,7 +3,7 @@ from fpdf import FPDF
 
 
 
-use_cases = {'favored_emojis_me': (10, 10, 30, 30),
+USE_CASES = {'favored_emojis_me': (10, 10, 30, 30),
              'favored_emojis_friend': (10, 200, 30, 30)
              }
 
@@ -11,7 +11,7 @@ use_cases = {'favored_emojis_me': (10, 10, 30, 30),
 def createPDF():
     pdf = FPDF()
     pdf.add_page()
-    for image_name, shape in use_cases.items():
+    for image_name, shape in USE_CASES.items():
         image_path = dir + image_name + '.png'
         x, y, w, h = shape
         pdf.image(image_path, x, y, w, h)

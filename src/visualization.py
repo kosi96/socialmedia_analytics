@@ -1,5 +1,8 @@
 import plotly.graph_objects as go
 
+
+COLOR_PALETTES = ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']
+
 layout = go.Layout(
     font={'family': 'Roboto',
           'size': 14,
@@ -23,10 +26,11 @@ layout = go.Layout(
     paper_bgcolor='#23272c'
 )
 
-color_palettes = ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']
+def default_dir(my_username, friend_username):
+    return f'data/usecases/{my_username}_{friend_username}/'
 
 
-def line_chart_with_moving_average(series_main, series_ma=tuple(), custom_name=('', ''), type='year', save_as=None):
+def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', ''), type='year', save=False, save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(
         go.Scatter(
@@ -35,7 +39,7 @@ def line_chart_with_moving_average(series_main, series_ma=tuple(), custom_name=(
             name='Total',
         ))
 
-    if series_ma is not None:
+    if len(series_ma) != 0:
         fig.add_trace(
             go.Scatter(
                 x=series_ma[0].index,
@@ -72,27 +76,28 @@ def line_chart_with_moving_average(series_main, series_ma=tuple(), custom_name=(
             height=None
         )
 
-    if save_as != None:
+    if save:
         fig.write_image(save_as)
     else:
         fig.show()
 
 
-def horizontal_bar_chart(dict, custom_name='', side='left', save_as=None):
+def horizontal_bar_chart(dict, title='', suffix='', side='left', save=False, save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Bar(
         x=list(dict.values()),
         y=list(dict.keys()),
-        text=[str(v) + '%' for v in dict.values()],
+        text=[str(v) + suffix for v in dict.values()],
+        # insidetextanchor='middle',
         width=0.7,
         orientation='h',
         textposition='inside',
         marker={'line': {'width': 2},
-                'color': color_palettes}
+                'color': COLOR_PALETTES}
     ))
 
     fig.update_layout(
-        title={'text': f'Favored Emojis {custom_name}'},
+        title={'text': title},
         xaxis={'showline': False,
                'showticklabels': False},
         yaxis={'ticks': ""},
@@ -108,106 +113,7 @@ def horizontal_bar_chart(dict, custom_name='', side='left', save_as=None):
                    'side': 'right',
                    })
 
-    if save_as != None:
+    if save:
         fig.write_image(save_as)
     else:
         fig.show()
-
-#
-# def linePlotWithMonthlyTrend(series):
-#     fig = px.line(
-#         x=series.index,
-#         y=series.values,
-#         template=base_template
-#     )
-#
-#     trendline = px.scatter(
-#         x=series.index,
-#         y=series.values,
-#         opacity=0,
-#         template=base_template,
-#         trendline="rolling",
-#         trendline_options={'window': 30},
-#         trendline_color_override='#FFA500'
-#     )
-#
-#     fig.add_traces(
-#         list(trendline.select_traces())
-#     )
-#
-#     fig.update_yaxes(range=[0, max(series.values)])
-#
-#     fig.show()
-#
-#
-# def horizontalBarChart(data, reverse=False):
-#     fig = px.bar(
-#         x=data.values(),
-#         y=data.keys(),
-#         orientation='h',
-#         text=data.values(),
-#         template=base_template
-#     )
-#
-#     fig.update_layout(title={'text': 'Favourite Emojis'},
-#                       xaxis={'title': '',
-#                              'showline': False,
-#                              'zeroline': False,
-#                              'showgrid': False,
-#                              'showticklabels': False
-#                              },
-#                       yaxis={'title': '',
-#                              'ticks': ""},
-#                       # textposition='inside',
-#                       # marker={'line': {'width': 2},
-#                       #         'color': ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']},
-#                       font={'size': 14},
-#                       width=300, height=300)
-#     if reverse:
-#         fig.update_layout(
-#             xaxis={"autorange": "reversed"},
-#             yaxis={"mirror": "allticks", 'side': 'right'}
-#         )
-#
-#     fig.show()
-#
-#
-# def linePlotWithDailyTrend(df):
-#     fig = px.line(
-#         x=df.index,
-#         y=df[0],
-#         template=base_template
-#     )
-#
-#     trendline = px.scatter(
-#         x=df.index,
-#         y=df[0],
-#         opacity=0,
-#         template=base_template,
-#         trendline="rolling",
-#         trendline_options={'window': 60},
-#         trendline_color_override='#FFA500'
-#     )
-#
-#     # fig.add_traces(
-#     #     list(trendline.select_traces())
-#     # )
-#
-#     fig.update_yaxes(range=[0, max(df[0].values)])
-#
-#     fig.update_layout(title={'text': 'Messages throughout the day'},
-#                       xaxis={
-#                           'title': '',
-#                           'dtick': 60
-#                       },
-#                       yaxis={
-#                           'title': '',
-#                           'ticks': "",
-#                           'color': '#a3a7b0',
-#                           'tick0': 0.5
-#                       },
-#                       xaxis_tickangle=-45,
-#                       font={'size': 14}
-#                       )
-#
-#     fig.show()

@@ -8,13 +8,13 @@ import re
 
 messages_schema = ['source', 'sender', 'timestamp', 'content']
 
-base_instagram_path = 'data/raw/instagram/messages/inbox'
-base_facebook_path = 'data/raw/facebook/messages/inbox'
-base_whatsapp_path = 'data/raw/whatsapp'
+BASE_INSTAGRAM_PATH = 'data/raw/instagram/messages/inbox'
+BASE_FACEBOOK_PATH = 'data/raw/facebook/messages/inbox'
+BASE_WHATSAPP_PATH = 'data/raw/whatsapp'
 
 
 def get_message_file_via_friend_username(source_dir, friend_username):
-    if source_dir == base_whatsapp_path:
+    if source_dir == BASE_WHATSAPP_PATH:
         file_path = list(glob.iglob(f'{source_dir}/{friend_username}*/*.txt'))
     else:
         file_path = list(glob.iglob(f'{source_dir}/{friend_username}_*/*.json'))
@@ -154,17 +154,18 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
     return df
 
 def get_preprocessed_data_frame():
-    my_username, friend_username = load_config_file_and_fetch_usernames()
+    config = load_config()
+    my_username, friend_username = get_usernames(config)
 
     df_path = f'data/processed/{my_username}_{friend_username}.pkl'
     if os.path.isfile(df_path):
         return pd.read_pickle(df_path)
     else:
-        ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(base_instagram_path, friend_username),
+        ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(BASE_INSTAGRAM_PATH, friend_username),
                                                    my_username, friend_username)
-        fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(base_facebook_path, friend_username),
+        fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(BASE_FACEBOOK_PATH, friend_username),
                                                   my_username, friend_username)
-        wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(base_whatsapp_path, friend_username),
+        wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(BASE_WHATSAPP_PATH, friend_username),
                                                   my_username, friend_username)
 
         df = pd.concat([ig, fb, wa])
@@ -172,15 +173,21 @@ def get_preprocessed_data_frame():
         return df
 
 
-def load_config_file_and_fetch_usernames():
+def load_config():
     if not os.path.isfile('config.json'):
         raise Exception("No config.json found in the root directory.")
 
     with open('config.json', 'r') as f:
         config = json.load(f)
         # TODO: verify valid config (mandatory fields)
+    return config
 
+
+def get_usernames(config):
     return config['my_username'], config['friend_username']
+
+def get_custom_names(config):
+    return config['my_custom_name'], config['friend_custom_name']
 
 
 if __name__ == '__main__':
