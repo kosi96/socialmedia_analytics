@@ -26,20 +26,29 @@ layout = go.Layout(
 color_palettes = ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']
 
 
-def line_chart_with_moving_average(main_series, moving_average_series=[], type='year', save_as=None):
+def line_chart_with_moving_average(series_main, series_ma=tuple(), custom_name=('', ''), type='year', save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(
         go.Scatter(
-            x=main_series.index,
-            y=main_series.values,
+            x=series_main.index,
+            y=series_main.values,
+            name='Total',
         ))
 
-    for ma_series in moving_average_series:
+    if series_ma is not None:
         fig.add_trace(
             go.Scatter(
-                x=ma_series.index,
-                y=ma_series.values,
+                x=series_ma[0].index,
+                y=series_ma[0].values,
+                name=custom_name[0],
 
+            ))
+
+        fig.add_trace(
+            go.Scatter(
+                x=series_ma[1].index,
+                y=series_ma[1].values,
+                name=custom_name[1],
             ))
 
     if type == 'year':
@@ -48,17 +57,19 @@ def line_chart_with_moving_average(main_series, moving_average_series=[], type='
             xaxis={
                 'dtick': 'M1',
                 'tickformat': '%b'},
-            width=1000,
-            height=600
+            width=None,
+            height=None
         )
     else:
         fig.update_layout(
             title={'text': 'Messages throughout the day'},
+            # xaxis_tickformat='%H:%M',
             xaxis={
-                'tickformat': '%H:%M'},
+                    'dtick': 1000*60*30, # ms frequency
+                    'tickformat': '%H:%M'},
             xaxis_tickangle=-45,
-            width=1000,
-            height=600
+            width=None,
+            height=None
         )
 
     if save_as != None:
@@ -67,12 +78,12 @@ def line_chart_with_moving_average(main_series, moving_average_series=[], type='
         fig.show()
 
 
-def horizontal_bar_chart(dict, labels='left', save_as=None):
+def horizontal_bar_chart(dict, custom_name='', side='left', save_as=None):
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Bar(
         x=list(dict.values()),
         y=list(dict.keys()),
-        text=list(dict.values()),
+        text=[str(v) + '%' for v in dict.values()],
         width=0.7,
         orientation='h',
         textposition='inside',
@@ -81,16 +92,16 @@ def horizontal_bar_chart(dict, labels='left', save_as=None):
     ))
 
     fig.update_layout(
-        title={'text': 'Favored Emojis'},
+        title={'text': f'Favored Emojis {custom_name}'},
         xaxis={'showline': False,
                'showticklabels': False},
         yaxis={'ticks': ""},
         font={'size': 18},
-        width=1000,
-        height=600
+        width=None,
+        height=None
     )
 
-    if labels != 'left':
+    if side != 'left':
         fig.update_layout(
             xaxis={'autorange': 'reversed'},
             yaxis={'mirror': 'allticks',
