@@ -156,21 +156,21 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
 def get_preprocessed_data_frame():
     config = load_config()
     my_username, friend_username = get_usernames(config)
+    df_file = f'data/processed/{my_username}_{friend_username}.pkl'
 
-    df_path = f'data/processed/{my_username}_{friend_username}.pkl'
-    if os.path.isfile(df_path):
-        return pd.read_pickle(df_path)
-    else:
-        ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(BASE_INSTAGRAM_PATH, friend_username),
-                                                   my_username, friend_username)
-        fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(BASE_FACEBOOK_PATH, friend_username),
-                                                  my_username, friend_username)
-        wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(BASE_WHATSAPP_PATH, friend_username),
-                                                  my_username, friend_username)
+    if os.path.isfile(df_file):
+        return pd.read_pickle(df_file)
 
-        df = pd.concat([ig, fb, wa])
-        df.to_pickle(df_path)
-        return df
+    ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(BASE_INSTAGRAM_PATH, friend_username),
+                                               my_username, friend_username)
+    fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(BASE_FACEBOOK_PATH, friend_username),
+                                              my_username, friend_username)
+    wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(BASE_WHATSAPP_PATH, friend_username),
+                                              my_username, friend_username)
+
+    df = pd.concat([ig, fb, wa])
+    df.to_pickle(df_file)
+    return df
 
 
 def load_config():

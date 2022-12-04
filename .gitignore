@@ -1,6 +1,7 @@
 .idea
-data/
+data/raw/
+data/processed/
+data/raw/
 sample/
-src_obsolete/
 venv/
 config.json

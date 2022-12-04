@@ -1,14 +1,13 @@
 import plotly.graph_objects as go
 
-
 COLOR_PALETTES = ['#2AF598', '#22E4AC', '#1BD7BB', '#14C9CB', '#0FBED8']
 
 layout = go.Layout(
     font={'family': 'Roboto',
-          'size': 14,
+          'size': 16,
           'color': 'whitesmoke'},
     template='seaborn',
-    margin={'t': 50, 'b': 70},
+    # margin={'t': 50, 'b': 70},
     xaxis={'showline': True,
            'zeroline': False,
            'showgrid': False,
@@ -25,9 +24,6 @@ layout = go.Layout(
     plot_bgcolor='#23272c',
     paper_bgcolor='#23272c'
 )
-
-def default_dir(my_username, friend_username):
-    return f'data/usecases/{my_username}_{friend_username}/'
 
 
 def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', ''), type='year', save=False, save_as=None):
@@ -55,14 +51,17 @@ def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', '
                 name=custom_name[1],
             ))
 
-    if type == 'year':
+    scale = 2.22
+    n = 700
+
+    if type == 'overall_freq':
         fig.update_layout(
-            title={'text': 'Messages throughout the year'},
-            xaxis={
-                'dtick': 'M1',
-                'tickformat': '%b'},
-            width=None,
-            height=None
+            # title={'text': 'Messages throughout the year'},
+            # xaxis={
+            #     'dtick': 'M1',
+            #     'tickformat': '%b'},
+            width=n*scale,
+            height=n
         )
     else:
         fig.update_layout(
@@ -72,8 +71,8 @@ def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', '
                     'dtick': 1000*60*30, # ms frequency
                     'tickformat': '%H:%M'},
             xaxis_tickangle=-45,
-            width=None,
-            height=None
+            width=n*scale,
+            height=n
         )
 
     if save:
@@ -96,14 +95,16 @@ def horizontal_bar_chart(dict, title='', suffix='', side='left', save=False, sav
                 'color': COLOR_PALETTES}
     ))
 
+    n = 450
+
     fig.update_layout(
         title={'text': title},
         xaxis={'showline': False,
                'showticklabels': False},
         yaxis={'ticks': ""},
         font={'size': 18},
-        width=None,
-        height=None
+        width=n,
+        height=n
     )
 
     if side != 'left':
