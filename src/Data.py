@@ -140,7 +140,7 @@ class Data:
         pdf.cell(190, 10, f'{self.my_custom_name} vs {self.friend_custom_name}', 1, 0, 'C')
 
         for image_name, shape in CHARTS.items():
-            image_path = f'{self.visualization_dir}{image_name}.png'
+            image_path = f'{self.visualization_dir}/{image_name}.png'
             x, y, w, h = shape
             pdf.image(image_path, x, y, w, h)
 
