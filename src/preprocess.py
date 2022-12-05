@@ -77,6 +77,9 @@ def instagram_data_to_intermediate_format(file_path,  my_username, friend_userna
         ## Get human readable content (č, š, ž)
         df = df.apply(change_encoding)
 
+        ## Fill nan content as it links to photos, reactinos, etc.
+        df['content'] = df['content'].str.replace('nan', '[Not supported actions]')
+
         ## Unify usernames
         unique_usernames = get_unique_usernames(df['sender'], my_username, friend_username)
         df.replace({'sender': unique_usernames}, inplace=True)
@@ -100,6 +103,9 @@ def facebook_data_to_intermediate_format(file_path, my_username, friend_username
         ## Get human readable content (č, š, ž)
         df = df.apply(change_encoding)
 
+        ## Fill nan content as it links to photos, reactinos, etc.
+        df['content'] = df['content'].str.replace('nan', '[Not supported actions]')
+
         ## Unify usernames
         unique_usernames = get_unique_usernames(df['sender'], my_username, friend_username)
         df.replace({'sender': unique_usernames}, inplace=True)
@@ -118,7 +124,6 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
 
         messages_list = []
         sender, timestamp, content = None, None, None
-        tmp_row = ["user", "date", "content"]
         for row in reader:
 
             ## There are some empty rows
@@ -153,25 +158,6 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
 
     return df
 
-def get_preprocessed_data_frame():
-    config = load_config()
-    my_username, friend_username = get_usernames(config)
-    df_file = f'data/processed/{my_username}_{friend_username}.pkl'
-
-    if os.path.isfile(df_file):
-        return pd.read_pickle(df_file)
-
-    ig = instagram_data_to_intermediate_format(get_message_file_via_friend_username(BASE_INSTAGRAM_PATH, friend_username),
-                                               my_username, friend_username)
-    fb = facebook_data_to_intermediate_format(get_message_file_via_friend_username(BASE_FACEBOOK_PATH, friend_username),
-                                              my_username, friend_username)
-    wa = whatsapp_data_to_intermediate_format(get_message_file_via_friend_username(BASE_WHATSAPP_PATH, friend_username),
-                                              my_username, friend_username)
-
-    df = pd.concat([ig, fb, wa])
-    df.to_pickle(df_file)
-    return df
-
 
 def load_config():
     if not os.path.isfile('config.json'):
@@ -189,7 +175,5 @@ def get_usernames(config):
 def get_custom_names(config):
     return config['my_custom_name'], config['friend_custom_name']
 
-
-if __name__ == '__main__':
-    get_preprocessed_data_frame()
-    print('PyCharm')
+def get_sources(config):
+    return config['sources']

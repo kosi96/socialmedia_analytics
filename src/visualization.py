@@ -7,7 +7,6 @@ layout = go.Layout(
           'size': 16,
           'color': 'whitesmoke'},
     template='seaborn',
-    # margin={'t': 50, 'b': 70},
     xaxis={'showline': True,
            'zeroline': False,
            'showgrid': False,
@@ -26,7 +25,7 @@ layout = go.Layout(
 )
 
 
-def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', ''), type='year', save=False, save_as=None):
+def line_chart_with_moving_average(series_main, series_ma, custom_ma_name, type, save_as):
     fig = go.Figure(layout=layout)
     fig.add_trace(
         go.Scatter(
@@ -35,12 +34,12 @@ def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', '
             name='Total',
         ))
 
-    if len(series_ma) != 0:
+    if series_ma is not None:
         fig.add_trace(
             go.Scatter(
                 x=series_ma[0].index,
                 y=series_ma[0].values,
-                name=custom_name[0],
+                name=custom_ma_name[0],
 
             ))
 
@@ -48,40 +47,30 @@ def line_chart_with_moving_average(series_main, series_ma=(), custom_name=('', '
             go.Scatter(
                 x=series_ma[1].index,
                 y=series_ma[1].values,
-                name=custom_name[1],
+                name=custom_ma_name[1],
             ))
-
-    scale = 2.22
-    n = 700
 
     if type == 'overall_freq':
         fig.update_layout(
-            # title={'text': 'Messages throughout the year'},
-            # xaxis={
-            #     'dtick': 'M1',
-            #     'tickformat': '%b'},
-            width=n*scale,
-            height=n
+            title={'text': 'Messages throughout the year'},
+            width=700*2.22,
+            height=700
         )
     else:
         fig.update_layout(
             title={'text': 'Messages throughout the day'},
-            # xaxis_tickformat='%H:%M',
             xaxis={
-                    'dtick': 1000*60*30, # ms frequency
+                    'dtick': 1000*60*30,  # in ms
                     'tickformat': '%H:%M'},
             xaxis_tickangle=-45,
-            width=n*scale,
-            height=n
+            width=700*2.22,
+            height=700
         )
 
-    if save:
-        fig.write_image(save_as)
-    else:
-        fig.show()
+    fig.write_image(save_as)
 
 
-def horizontal_bar_chart(dict, title='', suffix='', side='left', save=False, save_as=None):
+def horizontal_bar_chart(dict, title, suffix, side, save_as):
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Bar(
         x=list(dict.values()),
@@ -114,7 +103,4 @@ def horizontal_bar_chart(dict, title='', suffix='', side='left', save=False, sav
                    'side': 'right',
                    })
 
-    if save:
-        fig.write_image(save_as)
-    else:
-        fig.show()
+    fig.write_image(save_as)
