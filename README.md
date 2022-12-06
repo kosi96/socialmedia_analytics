@@ -10,7 +10,7 @@ You need to request data from social media manually. Currently we support social
 * facebook, 
 * whatsapp.
 
-Analysis is done for 1 year.  
+
 Only peer to peer conversation is supported (you vs friend).  
 Friend username usually consist of __namesurname__ and exported data is collected in folder named as  __namesurname_RandomID__.  
 If this is not the case you need to rename it manually.
