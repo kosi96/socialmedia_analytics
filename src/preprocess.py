@@ -177,3 +177,32 @@ def get_custom_names(config):
 
 def get_sources(config):
     return config['sources']
+
+def fetch_data_frame(sources, my_username, friend_username):
+    sources = '_'.join(sources)
+    data_frame_file_name = f'data/processed/{my_username}_{friend_username}_{sources}.pkl'
+
+    if os.path.isfile(data_frame_file_name):
+        df = pd.read_pickle(data_frame_file_name)
+        return df
+
+    ig, fb, wa = None, None, None
+
+    if 'instagram' in sources:
+        ig = instagram_data_to_intermediate_format(
+            get_message_file_via_friend_username(BASE_INSTAGRAM_PATH, friend_username),
+            my_username, friend_username)
+
+    if 'facebook' in sources:
+        fb = facebook_data_to_intermediate_format(
+            get_message_file_via_friend_username(BASE_FACEBOOK_PATH, friend_username),
+            my_username, friend_username)
+
+    if 'whatsapp' in sources:
+        wa = whatsapp_data_to_intermediate_format(
+            get_message_file_via_friend_username(BASE_WHATSAPP_PATH, friend_username),
+            my_username, friend_username)
+
+    df = pd.concat([ig, fb, wa])
+    df.to_pickle(data_frame_file_name)
+    return df
