@@ -15,7 +15,7 @@ BASE_WHATSAPP_PATH = 'data/raw/whatsapp'
 
 def get_message_file_via_friend_username(source_dir, friend_username):
     if source_dir == BASE_WHATSAPP_PATH:
-        file_path = list(glob.iglob(f'{source_dir}/{friend_username}*/*.txt'))
+        file_path = list(glob.iglob(f'{source_dir}/{friend_username}_*/*.txt'))
     else:
         file_path = list(glob.iglob(f'{source_dir}/{friend_username}_*/*.json'))
 

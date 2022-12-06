@@ -1,7 +1,4 @@
 .idea
-data/raw/
-data/processed/
-data/raw/
-sample/
+data/
 venv/
 config.json
