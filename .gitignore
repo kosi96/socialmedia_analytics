@@ -1,4 +1,5 @@
 .idea
-data/
+data/processed/
+data/visualization/
 venv/
 config.json
