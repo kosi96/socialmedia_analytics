@@ -134,7 +134,7 @@ class Data:
         pdf.add_page()
 
         # Background
-        pdf.image('data/visualization/BACKGROUND/bg_23272C.png', 0, 0, 210, 297)
+        pdf.image('pdf/background/bg_23272C.png', 0, 0, 210, 297)
 
         # Image
         pdf.cell(190, 10, f'{self.my_custom_name} vs {self.friend_custom_name}', 1, 0, 'C')
