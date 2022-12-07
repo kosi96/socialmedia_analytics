@@ -1,19 +1,19 @@
 # Social media analytics 
 
-Social media corporations are collecting and using your data to enhance various kinds of algorithms.  
-To get at least some use of collected data, you can request it manually from the corporations and analyse it
-to see yours and friends texting behaviour.
+Social media corporations are collecting and using user data to enhance various kinds of algorithms.  
+To get at least some use of your collected data, you can request it manually from their website and analyse it.  
+_social media analytics tool_ outputs a nice PDF which gives you a brief insight into your and your friends texting behaviour.
 
 ## Description
-You need to request data from social media manually. Currently we support social media exports from:
+You need to request data from social media manually. Currently, we support social media exports from:
 * instagram, 
 * facebook, 
 * whatsapp.
 
 
 Only peer to peer conversation is supported (you vs friend).  
-Friend username usually consist of __namesurname__ and exported data is collected in folder named as  __namesurname_RandomID__.  
-If this is not the case you need to rename it manually.
+Friend username usually consist of __namesurname__ and exported data is a collection of conversations. 
+There should be multiple folder named as __namesurname_RandomID__. If this is not the case you need to rename it manually.
 
 
 
@@ -46,7 +46,7 @@ Example:
 
 ```
 
-* A `config.json` is used to change the settings of an analysis. All fields are mandatory (`sources` can range from 1-3 sources).
+* Settings from `config.json` are used for social media analysis. All fields are mandatory, where sources can range from 1-3 sources.
 
 Example:
 ```bash
@@ -67,7 +67,8 @@ Example:
 
 * How to run the program
 ```
-python socialmedia_analytics/src/main.py
+cd socialmedia_analytics
+python src/main.py
 ```
 
 * Results
@@ -80,11 +81,6 @@ Generated PDF can be found in `pdf` folder.
 
 ## Version History
 
-[//]: # (* 0.2)
-
-[//]: # (    * Various bug fixes and optimizations)
-
-[//]: # (    * See [commit change]&#40;&#41; or See [release history]&#40;&#41;)
 * 1.0 Version
     * Initial Release
 
