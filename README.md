@@ -2,7 +2,7 @@
 
 Social media corporations are collecting and using user data to enhance various kinds of algorithms.  
 To get at least some use of your collected data, you can request it manually from their website and analyse it.  
-_social media analytics tool_ outputs a nice PDF which gives you a brief insight into your and your friends texting behaviour.
+_Social media analytics tool_ outputs a nice PDF which gives you a brief insight into your and your friends texting behaviour.
 
 ## Description
 You need to request data from social media manually. Currently, we support social media exports from:
@@ -73,7 +73,7 @@ python src/main.py
 
 * Results
 
-Generated PDF can be found in `pdf` folder.
+Generated PDF can be found in `pdf` folder (See example in pdf folder).
 
 ## Authors
 
