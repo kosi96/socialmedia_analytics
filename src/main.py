@@ -1,10 +1,10 @@
 import os
 
-from src.analytics import message_overall_frequency, message_daily_frequency, favored_emojis_in_message, \
+from analytics import message_overall_frequency, message_daily_frequency, favored_emojis_in_message, \
     message_response_time
-from src.pdf import generate_pdf
-from src.preprocess import load_config, get_usernames, get_custom_names, get_sources, fetch_data_frame
-from src.visualization import line_chart_with_moving_average, horizontal_bar_chart
+from pdf import generate_pdf
+from preprocess import load_config, get_usernames, get_custom_names, get_sources, fetch_data_frame
+from visualization import line_chart_with_moving_average, horizontal_bar_chart
 
 
 def create_dir(dir):
@@ -17,9 +17,13 @@ if __name__ == '__main__':
     my_custom_name, friend_custom_name = get_custom_names(config)
     sources = get_sources(config)
 
-    df = fetch_data_frame(sources, my_username, friend_username)
-
+    PROCESSED_DIR = f'data/processed/'
     VISUALIZATION_DIR = f'data/visualization/{my_username}_{friend_username}/'
+    create_dir(PROCESSED_DIR)
+    create_dir(VISUALIZATION_DIR)
+
+    df = fetch_data_frame(PROCESSED_DIR, sources, my_username, friend_username)
+
 
     # First use-case
     overall_freq = message_overall_frequency(df, period='1D')

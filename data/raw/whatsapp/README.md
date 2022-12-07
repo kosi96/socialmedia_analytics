@@ -1,0 +1,1 @@
+Add data from whatsapp (each conversation should be in a separate folder - nameusername_RandomID)
