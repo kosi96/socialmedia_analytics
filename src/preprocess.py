@@ -189,9 +189,9 @@ def get_custom_names(config):
 def get_sources(config):
     return config['sources']
 
-def fetch_data_frame(sources, my_username, friend_username):
+def fetch_data_frame(dir, sources, my_username, friend_username):
     sources = '_'.join(sources)
-    data_frame_file_name = f'data/processed/{my_username}_{friend_username}_{sources}.pkl'
+    data_frame_file_name = f'{dir}{my_username}_{friend_username}_{sources}.pkl'
 
     if os.path.isfile(data_frame_file_name):
         df = pd.read_pickle(data_frame_file_name)
