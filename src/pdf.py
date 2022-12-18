@@ -6,13 +6,13 @@ CHARTS = {
     'favored_emojis_me': (5, 130, 55, 60),
     'favored_emojis_friend': (55, 130, 55, 60),
 
-    'response_time_me': (110, 130, 55, 60),
-    'response_time_friend': (150, 130, 55, 60),
+    'response_time_me': (105, 130, 55, 60),
+    'response_time_friend': (155, 130, 55, 60),
 
     'daily_freq': (5, 200, 200, 90),
 }
 
-def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custom_name, sources):
+def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custom_name):
     pdf = FPDF()
     pdf.set_font('Arial', 'B', 16)
     pdf.set_text_color(245, 245, 245)
@@ -30,14 +30,10 @@ def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custo
         x, y, w, h = shape
         pdf.image(image_path, x, y, w, h)
 
-    # TODO: dynamic positioning -> include it as a custom label when creating a chart?
     # Sources
-    if 'whatsapp' in sources:
-        pdf.image('pdf/sources/whatsapp.png', 152, 147, 5, 5)
-    if 'instagram' in sources:
-        pdf.image('pdf/sources/instagram.png', 152, 159, 6, 6)
-    if 'facebook' in sources:
-        pdf.image('pdf/sources/facebook.png', 152, 171, 5, 5)
+    pdf.image('pdf/sources/whatsapp.png', 155, 147, 5, 5)
+    pdf.image('pdf/sources/instagram.png', 155, 159, 5, 5)
+    pdf.image('pdf/sources/facebook.png', 155, 171, 5, 5)
 
     pdf.line(5, 120, 205, 120)
     pdf.line(5, 190, 205, 190)

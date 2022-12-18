@@ -1,7 +1,7 @@
 import os
 
 from analytics import message_overall_frequency, message_daily_frequency, favored_emojis_in_message, \
-    message_response_time
+    message_response_time, get_sorted_user_message_response_time
 from pdf import generate_pdf
 from preprocess import load_config, get_usernames, get_custom_names, get_sources, fetch_data_frame
 from visualization import line_chart_with_moving_average, horizontal_bar_chart
@@ -64,14 +64,16 @@ if __name__ == '__main__':
     response_time = message_response_time(df, working_hours_from='07:00', working_hours_to='23:00',
                                           my_username=my_username,
                                           friend_username=friend_username)
+    response_time_me = get_sorted_user_message_response_time(response_time[my_username])
+    response_time_friend = get_sorted_user_message_response_time(response_time[friend_username])
 
-    horizontal_bar_chart(response_time[my_username],
+    horizontal_bar_chart(response_time_me,
                          title=f'Response time {my_custom_name}',
                          suffix=' min',
                          side='right',
                          show_label=False,
                          save_as=VISUALIZATION_DIR + 'response_time_me.png')
-    horizontal_bar_chart(response_time[friend_username],
+    horizontal_bar_chart(response_time_friend,
                          title=f'Response time {friend_custom_name}',
                          suffix=' min',
                          side='left',
@@ -79,6 +81,6 @@ if __name__ == '__main__':
                          save_as=VISUALIZATION_DIR + 'response_time_friend.png')
 
     # Generate pdf
-    generate_pdf(VISUALIZATION_DIR, my_username, friend_username, my_custom_name, friend_custom_name, sources)
+    generate_pdf(VISUALIZATION_DIR, my_username, friend_username, my_custom_name, friend_custom_name)
 
     print('PDF Generated!')

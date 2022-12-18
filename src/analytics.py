@@ -1,5 +1,5 @@
 import emoji as emoji
-from collections import Counter
+from collections import Counter, OrderedDict
 import pandas as pd
 
 
@@ -45,7 +45,7 @@ def extract_emojis_from_string(content):
 
 
 def message_response_time(df, working_hours_from, working_hours_to, my_username, friend_username):
-    avg_response_time_in_min = {my_username: {}, friend_username: {}}
+    avg_response_time_in_min = {my_username: {'fb': 0, 'ig': 0, 'wa': 0}, friend_username: {'fb': 0, 'ig': 0, 'wa': 0}}
 
     for source, df_source in df.groupby('source'):
         # Take into the account only "awake" hours
@@ -68,3 +68,7 @@ def message_response_time(df, working_hours_from, working_hours_to, my_username,
         avg_response_time_in_min[friend_username][source] = int(results_tmp[friend_username]/60)
 
     return avg_response_time_in_min
+
+def get_sorted_user_message_response_time(dict):
+    od = OrderedDict(sorted(dict.items()))
+    return od
