@@ -47,11 +47,13 @@ if __name__ == '__main__':
                          title=f'Favored Emojis {my_custom_name}',
                          suffix=' %',
                          side='right',
+                         show_label=True,
                          save_as=VISUALIZATION_DIR + 'favored_emojis_me.png')
     horizontal_bar_chart(favored_emojis_friend,
                          title=f'Favored Emojis {friend_custom_name}',
                          suffix=' %',
                          side='left',
+                         show_label=True,
                          save_as=VISUALIZATION_DIR + 'favored_emojis_friend.png')
 
     # Fourth use-case
@@ -63,14 +65,16 @@ if __name__ == '__main__':
                          title=f'Response time {my_custom_name}',
                          suffix=' min',
                          side='right',
+                         show_label=False,
                          save_as=VISUALIZATION_DIR + 'response_time_me.png')
     horizontal_bar_chart(response_time[friend_username],
                          title=f'Response time {friend_custom_name}',
                          suffix=' min',
                          side='left',
+                         show_label=False,
                          save_as=VISUALIZATION_DIR + 'response_time_friend.png')
 
     # Generate pdf
-    generate_pdf(VISUALIZATION_DIR, my_username, friend_username, my_custom_name, friend_custom_name)
+    generate_pdf(VISUALIZATION_DIR, my_username, friend_username, my_custom_name, friend_custom_name, sources)
 
     print('PDF Generated!')

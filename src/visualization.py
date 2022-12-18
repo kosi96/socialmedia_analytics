@@ -70,13 +70,12 @@ def line_chart_with_moving_average(series_main, series_ma, custom_ma_name, type,
     fig.write_image(save_as)
 
 
-def horizontal_bar_chart(dict, title, suffix, side, save_as):
+def horizontal_bar_chart(dict, title, suffix, side, show_label, save_as):
     fig = go.Figure(layout=layout)
     fig.add_trace(go.Bar(
         x=list(dict.values()),
         y=list(dict.keys()),
         text=[str(v) + suffix for v in dict.values()],
-        # insidetextanchor='middle',
         width=0.7,
         orientation='h',
         textposition='inside',
@@ -84,16 +83,15 @@ def horizontal_bar_chart(dict, title, suffix, side, save_as):
                 'color': COLOR_PALETTES}
     ))
 
-    n = 450
-
     fig.update_layout(
         title={'text': title},
         xaxis={'showline': False,
                'showticklabels': False},
-        yaxis={'ticks': ""},
+        yaxis={'showticklabels': show_label,
+               'ticks': ""},
         font={'size': 18},
-        width=n,
-        height=n
+        width=450,
+        height=450
     )
 
     if side != 'left':

@@ -12,7 +12,7 @@ CHARTS = {
     'daily_freq': (5, 200, 200, 90),
 }
 
-def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custom_name):
+def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custom_name, sources):
     pdf = FPDF()
     pdf.set_font('Arial', 'B', 16)
     pdf.set_text_color(245, 245, 245)
@@ -29,6 +29,15 @@ def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custo
         image_path = dir + image_name + '.png'
         x, y, w, h = shape
         pdf.image(image_path, x, y, w, h)
+
+    # TODO: dynamic positioning -> include it as a custom label when creating a chart?
+    # Sources
+    if 'whatsapp' in sources:
+        pdf.image('pdf/sources/whatsapp.png', 152, 147, 5, 5)
+    if 'instagram' in sources:
+        pdf.image('pdf/sources/instagram.png', 152, 159, 6, 6)
+    if 'facebook' in sources:
+        pdf.image('pdf/sources/facebook.png', 152, 171, 5, 5)
 
     pdf.line(5, 120, 205, 120)
     pdf.line(5, 190, 205, 190)

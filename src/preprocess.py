@@ -161,11 +161,22 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
 
 def load_config():
     if not os.path.isfile('config.json'):
-        raise Exception("No config.json found in the root directory.")
+        raise Exception('No config.json found in the root directory.')
 
     with open('config.json', 'r') as f:
         config = json.load(f)
-        # TODO: verify valid config (mandatory fields)
+
+    # Check if there are mandatory keys in config.json
+    for mandatory_key in ['my_username', 'friend_username', 'friend_username', 'my_custom_name', 'friend_custom_name']:
+        if mandatory_key not in config.keys():
+            raise Exception(f'Mandatory key: {mandatory_key} is not defined in config.json.')
+
+    # Check valid sources in config.json
+    valid_sources = ['whatsapp', 'instagram', 'facebook']
+    for source in config['sources']:
+        if source not in valid_sources:
+            raise Exception(f'Invalid source: {source} defined in config.json. Currently supported sources are {*valid_sources,}.')
+
     return config
 
 
