@@ -1,7 +1,8 @@
 # Social media analytics 
 
 Social media corporations are collecting and using user data to enhance various kinds of algorithms.
-Collected data is user property, and he can request it from their website. This data can be further analysed
+Collected data is user property, and he can request it from their website.   
+This data can be further analysed
 with the help of __social media analytics tool__, which outputs a nice PDF with a brief insight into 
 pearson texting behavior.
 
@@ -17,7 +18,7 @@ Only peer to peer conversation is supported (you vs friend).
 Friend username usually consist of __namesurname__. Collected data export from a source usually consist of 
 multiple folder named as __namesurname_RandomID__. If this is not the case you need to rename it manually.
 
-### Supported use cases
+#### Supported use cases
 **Message throughout the history**.shows texting trend in the past the history.
 
 **Favorite emojis**.shows favorite use of emojis (reactions are omitted from the analysis).
