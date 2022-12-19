@@ -9,9 +9,9 @@ pearson texting behavior.
 
 ## Description
 You need to request data exports from social media manually. Currently, we support sources from:
-* instagram, 
-* facebook, 
-* whatsapp.
+* [instagram](https://help.instagram.com/181231772500920), 
+* [facebook](https://www.facebook.com/help/212802592074644), 
+* [whatsapp](https://faq.whatsapp.com/1180414079177245/?cms_platform=android).
 
 
 Only peer to peer conversation is supported (you vs friend).  
