@@ -37,4 +37,4 @@ def generate_pdf(dir, my_username, friend_username, my_custom_name, friend_custo
 
     pdf.line(5, 120, 205, 120)
     pdf.line(5, 190, 205, 190)
-    pdf.output(f'pdf/{my_username}_{friend_username}.pdf', "F")
+    pdf.output(f'pdf/results/{my_username}_{friend_username}.pdf', "F")

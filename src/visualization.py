@@ -52,7 +52,7 @@ def line_chart_with_moving_average(series_main, series_ma, custom_ma_name, type,
 
     if type == 'overall_freq':
         fig.update_layout(
-            title={'text': 'Messages throughout the year'},
+            title={'text': 'Messages throughout the history'},
             width=700*2.22,
             height=700
         )

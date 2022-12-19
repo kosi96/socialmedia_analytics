@@ -8,8 +8,8 @@ import re
 
 messages_schema = ['source', 'sender', 'timestamp', 'content']
 
-BASE_INSTAGRAM_PATH = 'data/raw/instagram/messages/inbox'
-BASE_FACEBOOK_PATH = 'data/raw/facebook/messages/inbox'
+BASE_INSTAGRAM_PATH = 'data/raw/instagram'
+BASE_FACEBOOK_PATH = 'data/raw/facebook'
 BASE_WHATSAPP_PATH = 'data/raw/whatsapp'
 
 

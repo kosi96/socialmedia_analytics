@@ -1,23 +1,34 @@
 # Social media analytics 
 
-Social media corporations are collecting and using user data to enhance various kinds of algorithms.  
-To get at least some use of your collected data, you can request it manually from their website and analyse it.  
-_Social media analytics tool_ outputs a nice PDF which gives you a brief insight into your and your friends texting behaviour.
+Social media corporations are collecting and using user data to enhance various kinds of algorithms.
+Collected data is user property, and he can request it from their website. This data can be further analysed
+with the help of __social media analytics tool__, which outputs a nice PDF with a brief insight into 
+pearson texting behavior.
+
 
 ## Description
-You need to request data from social media manually. Currently, we support social media exports from:
+You need to request data exports from social media manually. Currently, we support sources from:
 * instagram, 
 * facebook, 
 * whatsapp.
 
 
 Only peer to peer conversation is supported (you vs friend).  
-Friend username usually consist of __namesurname__ and exported data is a collection of conversations. 
-There should be multiple folder named as __namesurname_RandomID__. If this is not the case you need to rename it manually.
+Friend username usually consist of __namesurname__. Collected data export from a source usually consist of 
+multiple folder named as __namesurname_RandomID__. If this is not the case you need to rename it manually.
 
+### Supported use cases
+**Message throughout the history**.shows texting trend in the past the history.
 
+**Favorite emojis**.shows favorite use of emojis (reactions are omitted from the analysis).
+
+**Response time**.shows response time per source. Response time is recorded only during the "day" (23:00 - 07:00 is considered sleep time) and can be 24h max
+(people usually see message within one day, but often forget to replay).
+
+**Message throughout the day**.shows person texting habit during the day.
 
 ## Getting Started
+
 
 ### Dependencies
 
@@ -29,26 +40,28 @@ There should be multiple folder named as __namesurname_RandomID__. If this is no
 
 * Collected data should be put into _data/raw/*SOCIAL_MEDIA_SOURCE*_
 
+
 Example:
 ```bash
 ├── data/
     ├── raw/
         ├── facebook/
-        │    └── messages/
-        │          └── inbox/
-        │              ├── name1surname1_randomid/
-        │                        ├── gifs/
-        │                        ├── photos/
-        │                        └── message_1.json
-        │              └── name2surname2_randomid/
+        │   │
+        │   ├── name1surname1_randomid/
+        │           ├── gifs/
+        │           ├── photos/
+        │           └── message_1.json
+        │   └── name2surname2_randomid/
+        │
+        │
         ├── instagram
         └── whatsapp
 
 ```
 
-* Settings from `config.json` are used for social media analysis. All fields are mandatory, where sources can range from 1-3 sources.
+* Settings from `config.json` are used for social media analysis, where all fields are mandatory.
 
-Example:
+**Config example**:
 ```bash
 {
   "my_username": "mynamemysurname",
@@ -73,11 +86,11 @@ python src/main.py
 
 * Results
 
-Generated PDF can be found in `pdf` folder (See example in pdf folder).
+Generated PDF can be found in `pdf/results` folder (See an example in pdf folder).
 
 ## Authors
 
-[Blaz Kosenina](https://si.linkedin.com/in/blaz-kosenina)
+[Blaž Košenina](https://si.linkedin.com/in/blaz-kosenina)
 
 ## Version History
 
