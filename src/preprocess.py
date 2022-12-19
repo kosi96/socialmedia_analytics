@@ -44,7 +44,10 @@ def to_valid_date_time_format(timestamp):
 
 def get_unique_usernames(series_username, my_username, friend_username):
     participants = list(series_username.unique())
-    if len(participants) != 2:
+    if len(participants) == 1:
+        raise Exception(f'In this conversation only one participant was active. Please choose another friend.')
+
+    if len(participants) > 2:
         raise Exception(f'Application currently supports up to 2 sender. Yet {len(participants)} were found!')
 
     match_0 = check_character_matching(my_username, participants[0])
@@ -131,7 +134,7 @@ def whatsapp_data_to_intermediate_format(file_path, my_username, friend_username
                 continue
 
             ## Received a new valid message (IF there is also a sender!)
-            elif re.match(r"\d/\d\d/\d\d, \d\d:\d\d", row[0]):
+            elif re.match(r"\d{1,2}/\d\d/\d\d, \d\d:\d\d", row[0]):
                 user_and_content_present = row[1].split(':', 1)
 
                 if (len(user_and_content_present) == 2):
